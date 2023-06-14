@@ -1,11 +1,11 @@
 - [ ] add logger
 - [ ] add protection helmet.
 - [ ] add path alias to ts config file
-- [x] check dotenv usage in ts + node
 - [ ] check ci/cd on github action
 - [ ] hide JWT key on yaml file on github action
+- [ ] change the name shown in email notification to be taotify.
 - [x] password requirement in schema
-- [x] process.env in utils is not readable(have to import again)
+- [x] process.env in utils is not readable
 
 - import env.config before import app, same thing apply to express async error
 
@@ -14,4 +14,8 @@
 - [x] add mongoDB to server
 - [ ] move email service out from user controller
 - [ ] add membership function with stripe purchasing API
-- [ ] JWT and cookie both store token at localStorage, what is the difference?
+- [x] add forget password route with AuthGuard(bearer token from local storage)
+- [ ] add log out function route with AuthGuard
+- [ ] complete payment process
+- [ ] store payment info(purchased item in db)
+- [ ] consider build a activation frontend page for better user experience

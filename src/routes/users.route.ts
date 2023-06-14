@@ -3,7 +3,7 @@ import {
 	register,
 	login,
 	activateUser,
-	forgotPassword,
+	forgetPassword,
 	resetPassword,
 	changePassword
 } from "../controllers/users.controller";
@@ -18,7 +18,7 @@ userRouter.post("/register", register);
 userRouter.get("/activate/:activateToken", activateUser);
 userRouter.post("/login", login);
 userRouter.patch("/change-password", authGuard, changePassword);
-userRouter.post("/forgot-password", forgotPassword);
+userRouter.post("/forget-password", forgetPassword);
 userRouter.put("/reset-password/:resetToken", resetPassword);
 
 export default userRouter;

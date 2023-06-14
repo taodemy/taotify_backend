@@ -45,8 +45,9 @@ export const register = async (req: Request, res: Response) => {
 	/*============================*/
 	// nodemailer
 	/*============================*/
-
-	const activateUrl = `${process.env.FRONTEND_URL}/${process.env.API_VERSION}/user/active/${activateToken}`;
+	const { BACKEND_URL, API_VERSION } = process.env;
+	// this url is a backend url with GET method, a single click will trigger it.
+	const activateUrl = `${BACKEND_URL}/${API_VERSION}/users/activate/${activateToken}`;
 
 	const message = `
 	<h2>Hi ${user.username || user.email}. Welcome to Taotify.</h2>
@@ -199,7 +200,7 @@ export const changePassword = async (req: AuthRequest, res: Response) => {
 /*============================*/
 // forgot password
 /*============================*/
-export const forgotPassword = async (req: AuthRequest, res: Response) => {
+export const forgetPassword = async (req: AuthRequest, res: Response) => {
 	if (!req.user) {
 		return res.status(403).json({ error: "no auth " });
 	}
@@ -232,9 +233,12 @@ export const forgotPassword = async (req: AuthRequest, res: Response) => {
 	}).save();
 
 	// Construct Reset Url
-	const resetUrl = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
+	// this reset url will be built from taotify frontend, and use the resetToken as a dynamic route
+	// with a reset button, the new password and this resetToken will be send to backend,
+	// and the info will be processed in reset-password route handler
+	const resetUrl = `${process.env.FRONTEND_URL}/password/${resetToken}`;
 
-	// Reset Email
+	// Reset Email pattern
 	const message = `
 		<h2>Hello ${user.username}</h2>
 		<hr>
@@ -263,7 +267,10 @@ export const forgotPassword = async (req: AuthRequest, res: Response) => {
 	}
 };
 
-// Reset Password
+/*============================*/
+// reset password
+/*============================*/
+
 export const resetPassword = async (req: Request, res: Response) => {
 	const { password } = req.body;
 	const { resetToken } = req.params;

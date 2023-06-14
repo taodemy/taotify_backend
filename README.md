@@ -2,7 +2,7 @@
 
 ### **<u>husky</u>**
 
-- clone project from github might not enable husky, you will need to redo the husky follow the instructions or go to [husky npm](https://www.npmjs.com/package/husky)
+- clone project from github might not enable husky, you will need to delete `.husky` file and redo the it following the instructions or go to [husky npm](https://www.npmjs.com/package/husky)
 - Edit package.json > prepare script and run it once:
 
 ```
@@ -25,3 +25,7 @@ git add .husky/pre-commit
 git commit -m "Keep calm and commit"
 # `npm run pre-commit` will run
 ```
+
+### **<u>node mailer</u>**
+
+- please use hot mail to send email, or search the configuration for other service provider, gmail has a higer security control though.

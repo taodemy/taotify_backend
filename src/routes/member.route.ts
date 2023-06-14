@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { trial } from "../controllers/membership.controller";
+import { monthly, trial } from "../controllers/membership.controller";
 
 const memberRouter = Router();
 
-memberRouter.use("", trial);
+memberRouter.patch("/", trial);
+memberRouter.patch("/monthly", monthly);
 
 export default memberRouter;
