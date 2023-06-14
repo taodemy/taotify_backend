@@ -1,0 +1,52 @@
+{
+	"name": "taotify_backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": ".src/index.js",
+	"scripts": {
+		"lint": "eslint . --ext .ts",
+		"build": "rimraf dist && npx tsc",
+		"prestart": "npm run build",
+		"start": "node dist/index.js",
+		"preserve": "npm run build",
+		"serve": "concurrently \"npx tsc -w\" \"nodemon dist/index.js\"",
+		"prettier": "prettier -w .",
+		"prepare": "husky install",
+		"pre-commit": "npm run lint"
+	},
+	"keywords": [],
+	"author": "Trent1900",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^5.1.0",
+		"cors": "^2.8.5",
+		"dotenv": "^16.1.4",
+		"express": "^4.18.1",
+		"express-async-errors": "^3.1.1",
+		"express-async-handler": "^1.2.0",
+		"jsonwebtoken": "^9.0.0",
+		"mongoose": "^6.6.1",
+		"nodemailer": "^6.9.3",
+		"rimraf": "^5.0.1",
+		"stripe": "^12.9.0"
+	},
+	"devDependencies": {
+		"@types/bcrypt": "^5.0.0",
+		"@types/express": "^4.17.17",
+		"@types/jsonwebtoken": "^9.0.2",
+		"@types/node": "^20.2.6",
+		"@types/nodemailer": "^6.4.8",
+		"@typescript-eslint/eslint-plugin": "^5.59.9",
+		"@typescript-eslint/parser": "^5.59.9",
+		"concurrently": "^8.2.0",
+		"eslint": "^8.42.0",
+		"eslint-config-prettier": "^8.8.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"husky": "^8.0.3",
+		"lint-staged": "^13.2.2",
+		"nodemon": "^2.0.20",
+		"prettier": "^2.8.8",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.1.0"
+	}
+}
