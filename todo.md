@@ -19,3 +19,6 @@
 - [ ] complete payment process
 - [ ] store payment info(purchased item in db)
 - [ ] consider build a activation frontend page for better user experience
+- [ ] the best practice for stripe to get a customer's email(await mongoose find)
+- [ ] check stripe customer.email before create a customer
+- [ ] 用户的邮箱信息存在 local storage 是不是一个好的 practice（Auth token中包含邮箱）

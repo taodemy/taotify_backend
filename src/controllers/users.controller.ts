@@ -154,7 +154,7 @@ export const login = async (req: Request, res: Response) => {
 	if (!isPassCorrect) {
 		return res.status(401).json({ error: `invalid password` });
 	}
-	const token = generateToken({ id: user._id, role: "user" });
+	const token = generateToken({ id: user._id, role: "user", email: user.email });
 	// send token to frontend to save the token in local storage.
 	// modify axios/fetch request header to contain the token in Authorization.
 	res.status(201).json({ user: user._id, token });

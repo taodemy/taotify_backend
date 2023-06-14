@@ -1,8 +1,8 @@
 import { verifyToken } from "../utils/jwt";
-// check if token in header matches
 import { NextFunction, Response } from "express";
 import { AuthRequest } from "../types";
 
+// check if token in header matches
 export default (req: AuthRequest, res: Response, next: NextFunction) => {
 	const authorization = req.header("authorization");
 	if (!authorization) {
