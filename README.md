@@ -29,3 +29,20 @@ git commit -m "Keep calm and commit"
 ### **<u>node mailer</u>**
 
 - please use hot mail to send email, or search the configuration for other service provider, gmail has a higer security control though.
+- set the email address and password in `.env` file to use node mailer.
+
+```
+EMAIL_HOST = smtp-mail.outlook.com
+SENDER = youremail@hotmail.com
+SENDER_PASS = your email password
+```
+
+### **<u>stripe webhook</u>**
+
+- for use in `dev` / local environment, you need to set up cli and listen to `localhost:3001/v1/stripe/webhook`, the endpoint from dev server, the script is `stripe listen --forward-to localhost:3001/v1/stripe/webhook`, or check the [instructions to set up stripe webhook](https://stripe.com/docs/webhooks/test?shell=true&api=true)
+- after setting up cli, you will find the prompt in terminal/shell looks like
+
+```
+Ready! You are using Stripe API Version [2020-08-27]. Your webhook signing secret is whsec_******
+```
+- use the sceret 

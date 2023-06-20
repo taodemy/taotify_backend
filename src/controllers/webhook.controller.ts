@@ -1,12 +1,15 @@
 // This is your test secret API key.
 import Stripe from "stripe";
 import { Request, Response } from "express";
+import Order from "../models/order.model";
+import User from "../models/user.models";
+import { PRICE_OPTIONS } from "../constant/memberType";
 
 // Replace this endpoint secret with your endpoint's unique secret
 // If you are testing with the CLI, find the secret by running 'stripe listen'
 // If you are using an endpoint defined with the API or dashboard, look in your webhook settings
 // at https://dashboard.stripe.com/webhooks
-const endpointSecret = "whsec_cc16915d661233f985dba54876098d7480fc3751ab04079b76cbedc07756b803";
+const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
 export const webhook = async (req: Request, res: Response) => {
 	if (!process.env.STRIPE_PRIVATE_KEY) {
@@ -15,8 +18,7 @@ export const webhook = async (req: Request, res: Response) => {
 	const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY, { apiVersion: "2022-11-15" });
 
 	let event = req.body;
-	// Only verify the event if you have an endpoint secret defined.
-	// Otherwise use the basic event deserialized with JSON.parse
+
 	if (endpointSecret) {
 		// Get the signature sent by Stripe
 		const signature = req.headers["stripe-signature"];
@@ -25,29 +27,48 @@ export const webhook = async (req: Request, res: Response) => {
 		}
 		try {
 			event = stripe.webhooks.constructEvent(req.body, signature, endpointSecret);
+
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			console.log(`⚠️  Webhook signature verification failed.`, err.message);
 			return res.sendStatus(400);
 		}
 	}
-	const data = event.data.object;
-	// console.log(data, "为了获取customer data");
-	// Handle the event
-	// const customer = await stripe.customers.retrieve(data.customer);
-	// console.log(customer, "received 之后的customer");
-	switch (event.type) {
-		case "payment_intent.succeeded":
-			// console.log(event.data.object.customer, "为了获取customer data 在switch里面");
-			// const paymentIntent = event.data.object;
-			console.log(`PaymentIntent for ${event.data.object.amount} was successful!`);
-			// Then define and call a method to handle the successful payment intent.
-			// handlePaymentIntentSucceeded(paymentIntent);
-			// eslint-disable-next-line no-case-declarations
-			const customer_data = await stripe.customers.retrieve(event.data.object.customer);
-			console.log(customer_data, "@@@");
-			break;
 
+	switch (event.type) {
+		case "checkout.session.completed": {
+			const session = event.data.object;
+			const subscription_id = session.subscription;
+			// 4242 4242 4242 4242
+			console.log(session, "@@@@ checkout.session.completed");
+			//  metadata: { order_id: '64910bc4e92e81cb65ff4fbf' },
+			const order_id = session.metadata.order_id as string;
+			// console.log(session, "order id");
+			const order = await Order.findByIdAndUpdate(
+				order_id,
+				{
+					subscription_id: subscription_id,
+					payment_status: "success"
+				},
+				{ new: true }
+			);
+			console.log(order, "@@@@ order");
+			if (order) {
+				const { price_id } = order;
+				const member = PRICE_OPTIONS[price_id as keyof typeof PRICE_OPTIONS];
+				// console.log(member, "@@member 容易读的版本");
+				const user = await User.findByIdAndUpdate(
+					order.user_id,
+					{
+						$addToSet: { orders: order._id },
+						member_type: member
+					},
+					{ new: true }
+				);
+				// console.log(user, "@@user");
+			}
+			break;
+		}
 		default:
 			// Unexpected event type
 			console.log(`Unhandled event type ${event.type}.`);

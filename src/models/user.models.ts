@@ -27,6 +27,17 @@ const schema = new Schema(
 		isVerified: {
 			type: Boolean,
 			default: false
+		},
+		orders: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: "Order"
+			}
+		],
+		member_type: {
+			type: String,
+			enum: ["trial", "monthly", "quarterly", "yearly"],
+			default: "trial"
 		}
 	},
 	{
