@@ -1,3 +1,4 @@
+import { verifyToken } from "./../utils/jwt";
 import { Request, Response } from "express";
 import crypto from "crypto";
 import UserModel from "../models/user.models";
@@ -32,7 +33,7 @@ export const register = async (req: Request, res: Response) => {
 	}
 
 	const activateToken = crypto.randomBytes(32).toString("hex") + user._id;
-	console.log(activateToken, "@@activate token");
+	// console.log(activateToken, "@@activate token");
 	const hashedToken = crypto.createHash("sha256").update(activateToken).digest("hex");
 
 	// Save Token to DB
@@ -97,7 +98,7 @@ export const activateUser = async (req: Request, res: Response) => {
 		token: hashedToken,
 		expiresAt: { $gt: Date.now() }
 	});
-	console.log(userToken, "@@@userToken");
+	// console.log(userToken, "@@@userToken");
 	if (!userToken) {
 		res.status(404);
 		throw new Error("Invalid or Expired Token");
@@ -300,4 +301,19 @@ export const resetPassword = async (req: Request, res: Response) => {
 	res.status(200).json({
 		message: "Password Reset Successful, Please Login"
 	});
+};
+
+// login status
+
+export const loginStatus = (req: AuthRequest, res: Response) => {
+	// 检查看看登陆状态
+	if (!req.user) {
+		return res.status(403).json({ error: "no auth " });
+	}
+	const { token } = req.user;
+	console.log(token);
+	// const decode = verifyToken(token);
+	// !decode && res.status(403).json({ isLogin: false });
+	// res.status(200).json({ isLogin: true });
+	res.status(200).send(req.user);
 };

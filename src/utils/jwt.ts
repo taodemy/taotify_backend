@@ -7,9 +7,13 @@ if (!process.env.JWT_KEY) {
 const JWT_KEY = process.env.JWT_KEY as string;
 
 export const generateToken = (payload: string | object) => {
-	return jwt.sign(payload, JWT_KEY, { expiresIn: "3h" });
+	return jwt.sign(payload, JWT_KEY, { expiresIn: "8h" });
 };
 
 export const verifyToken = (token: string) => {
 	return jwt.verify(token, JWT_KEY) as JwtPayload;
 };
+
+// export const renewToken = (payload: string | object) => {
+// 	return jwt.sign(payload, JWT_KEY, { expiresIn: "24h" });
+// };

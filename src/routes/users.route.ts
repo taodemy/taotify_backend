@@ -5,7 +5,8 @@ import {
 	activateUser,
 	forgetPassword,
 	resetPassword,
-	changePassword
+	changePassword,
+	loginStatus
 } from "../controllers/users.controller";
 import authGuard from "../middleware/authGuard";
 
@@ -16,6 +17,7 @@ userRouter.get("", (req, res) => {
 });
 userRouter.post("/register", register);
 userRouter.get("/activate/:activateToken", activateUser);
+userRouter.get("/status", authGuard, loginStatus);
 userRouter.post("/login", login);
 userRouter.patch("/change-password", authGuard, changePassword);
 userRouter.post("/forget-password", forgetPassword);
