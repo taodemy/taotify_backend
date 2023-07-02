@@ -13,7 +13,3 @@ export const generateToken = (payload: string | object) => {
 export const verifyToken = (token: string) => {
 	return jwt.verify(token, JWT_KEY) as JwtPayload;
 };
-
-// export const renewToken = (payload: string | object) => {
-// 	return jwt.sign(payload, JWT_KEY, { expiresIn: "24h" });
-// };

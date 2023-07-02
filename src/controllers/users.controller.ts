@@ -9,18 +9,18 @@ import TokenModel from "../models/token.model";
 import { AuthRequest } from "../types";
 
 export const register = async (req: Request, res: Response) => {
-	const { username, email, password } = req.body;
-	if (!email || !password || !username) {
+	const { email, password } = req.body;
+	if (!email || !password) {
 		res.status(400).json({ error: "missing required info" });
 		return;
 	}
-	const userFromDb = await UserModel.findOne({ $or: [{ email }, { username }] });
+	const userFromDb = await UserModel.findOne({ $or: [{ email }] });
 	if (userFromDb) {
 		return res.status(400).json({ error: "username or email existed" });
 	}
 	const hashedPassword = await hashPassword(password);
 	// console.log(hashedPassword);
-	const user = new UserModel({ email, password: hashedPassword, username });
+	const user = new UserModel({ email, password: hashedPassword, username: email });
 
 	/*============================*/
 	// generate Active Token in db
@@ -311,9 +311,9 @@ export const loginStatus = (req: AuthRequest, res: Response) => {
 		return res.status(403).json({ error: "no auth " });
 	}
 	const { token } = req.user;
-	console.log(token);
-	// const decode = verifyToken(token);
-	// !decode && res.status(403).json({ isLogin: false });
-	// res.status(200).json({ isLogin: true });
-	res.status(200).send(req.user);
+	// const verified = verifyToken(token)
+
+	const decode = verifyToken(token);
+	!decode && res.status(403).json({ isLogin: false });
+	res.status(200).json({ isLogin: true });
 };

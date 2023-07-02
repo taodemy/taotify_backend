@@ -67,7 +67,7 @@ stripeRouter.post("/create-subscription", async (req: AuthRequest, res) => {
 			order_id: _id.toString()
 		},
 		line_items: [{ price: price_id, quantity: 1 }],
-		success_url: `${process.env.FRONTEND_URL}/stripe/cart`,
+		success_url: `${process.env.FRONTEND_URL}/member/cart`,
 		cancel_url: `${process.env.FRONTEND_URL}/cancel`
 	});
 	console.log(session.id, "check session id and subscription_id, see any difference ");
@@ -87,7 +87,6 @@ stripeRouter.post("/cancel-subscription", async (req, res) => {
 
 stripeRouter.post("/update-subscription", async (req, res) => {
 	// update subscription 只要拿到price id就可以。
-	const { price_id, subscription_id } = req.body;
 	try {
 		const subscription = await stripe.subscriptions.retrieve(req.body.subscriptionId);
 		const updatedSubscription = await stripe.subscriptions.update(req.body.subscriptionId, {
